@@ -3,13 +3,15 @@ import { Card as CardType, Operator } from '../types/game';
 
 interface DropZoneProps {
   onDrop?: (item: CardType | Operator, position: number) => void;
+  onRemove?: (position: number) => void;
   position: number;
-  currentItem?: CardType | Operator;
+  currentItem?: CardType | Operator | null;
   className?: string;
 }
 
 export const DropZone: React.FC<DropZoneProps> = ({
   onDrop,
+  onRemove,
   position,
   currentItem,
   className = ''
@@ -28,7 +30,21 @@ export const DropZone: React.FC<DropZoneProps> = ({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    // Handle drop logic here
+    
+    try {
+      const dragData = JSON.parse(e.dataTransfer.getData('application/json'));
+      if (dragData && (dragData.type === 'card' || dragData.type === 'operator')) {
+        onDrop?.(dragData.data, position);
+      }
+    } catch (error) {
+      console.error('Error parsing drag data:', error);
+    }
+  };
+
+  const handleClick = () => {
+    if (currentItem) {
+      onRemove?.(position);
+    }
   };
 
   const renderContent = () => {
@@ -46,10 +62,12 @@ export const DropZone: React.FC<DropZoneProps> = ({
 
   return (
     <div
-      className={`drop-zone ${isDragOver ? 'drag-over' : ''} ${className}`}
+      className={`drop-zone ${isDragOver ? 'drag-over' : ''} ${currentItem ? 'has-item' : ''} ${className}`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
+      onClick={handleClick}
+      style={{ cursor: currentItem ? 'pointer' : 'default' }}
     >
       {renderContent()}
     </div>

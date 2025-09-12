@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from './components/Card';
 import { OperatorButton } from './components/OperatorButton';
 import { DropZone } from './components/DropZone';
@@ -6,6 +6,7 @@ import { Card as CardType, Operator, GameState } from './types/game';
 import { generateCards, calculateExpression, checkSolution, OPERATORS } from './utils/gameRules';
 import { getSolutions } from './utils/solutionLookup';
 import { playSound } from './utils/audioUtils';
+import './App.css';
 
 function App() {
   const [gameState, setGameState] = useState<GameState>({
@@ -20,6 +21,7 @@ function App() {
   });
 
   const [draggedItem, setDraggedItem] = useState<CardType | Operator | null>(null);
+  const [dropZoneItems, setDropZoneItems] = useState<(CardType | Operator | null)[]>(new Array(7).fill(null));
 
   // Initialize game
   useEffect(() => {
@@ -63,6 +65,7 @@ function App() {
       showSolutions: false,
       solutions
     }));
+    setDropZoneItems(new Array(7).fill(null));
   };
 
   const handleModeChange = (mode: 'easy' | 'standard') => {
@@ -83,10 +86,40 @@ function App() {
     setDraggedItem(null);
   };
 
-  const handleExpressionAdd = (item: CardType | Operator) => {
+  const handleDrop = (item: CardType | Operator, position: number) => {
+    // Update drop zone items
+    setDropZoneItems(prev => {
+      const newItems = [...prev];
+      newItems[position] = item;
+      return newItems;
+    });
+
+    // Update current expression based on drop zones
+    const newExpression = dropZoneItems.filter(item => item !== null);
+    if (position < dropZoneItems.length) {
+      newExpression[position] = item;
+    }
+    
     setGameState(prev => ({
       ...prev,
-      currentExpression: [...prev.currentExpression, item]
+      currentExpression: newExpression as (CardType | Operator)[]
+    }));
+    
+    playSound('cardDeal');
+  };
+
+  const handleRemove = (position: number) => {
+    setDropZoneItems(prev => {
+      const newItems = [...prev];
+      newItems[position] = null;
+      return newItems;
+    });
+
+    // Update expression by rebuilding from drop zones
+    const newExpression = dropZoneItems.filter((item, idx) => idx !== position && item !== null);
+    setGameState(prev => ({
+      ...prev,
+      currentExpression: newExpression as (CardType | Operator)[]
     }));
   };
 
@@ -97,6 +130,7 @@ function App() {
       result: null,
       isCorrect: false
     }));
+    setDropZoneItems(new Array(7).fill(null));
   };
 
   const toggleSolutions = () => {
@@ -120,7 +154,7 @@ function App() {
   };
 
   return (
-    <div className="game-board">
+    <div className="game-container">
       <div className="container">
         <h1 className="text-center mb-4">24 Math Game</h1>
         
@@ -158,6 +192,7 @@ function App() {
                   onDragEnd={handleDragEnd}
                   isDealingAnimation={true}
                   dealDelay={index * 200}
+                  isUsed={dropZoneItems.some(item => item && typeof item === 'object' && item.id === card.id)}
                   isDragging={draggedItem === card}
                 />
               ))}
@@ -176,7 +211,6 @@ function App() {
                   operator={operator}
                   onDragStart={handleOperatorDragStart}
                   onDragEnd={handleDragEnd}
-                  onClick={handleExpressionAdd}
                   isDragging={draggedItem === operator}
                 />
               ))}
@@ -198,7 +232,9 @@ function App() {
               <DropZone
                 key={position}
                 position={position}
-                currentItem={gameState.currentExpression[position]}
+                currentItem={dropZoneItems[position]}
+                onDrop={handleDrop}
+                onRemove={handleRemove}
               />
             ))}
           </div>

@@ -1,0 +1,222 @@
+/* Game Board Styling */
+.game-container {
+  background: linear-gradient(135deg, #2d5016, #4a7c59);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Card Styling */
+.card {
+  width: 80px;
+  height: 120px;
+  background: white;
+  border: 2px solid #333;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.card:hover:not(.used) {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card.dragging {
+  opacity: 0.7;
+  transform: scale(1.1) rotate(-5deg);
+  z-index: 1000;
+}
+
+.card.used {
+  opacity: 0.4;
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
+/* Operator Button Styling */
+.operator-btn {
+  width: 60px;
+  height: 60px;
+  background: #ff6b35;
+  border: 2px solid #333;
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.operator-btn:hover {
+  background: #ff8c42;
+  transform: scale(1.1);
+}
+
+.operator-btn.dragging {
+  opacity: 0.7;
+  transform: scale(1.2) rotate(10deg);
+  z-index: 1000;
+}
+
+/* Drop Zone Styling */
+.drop-zone {
+  width: 80px;
+  height: 120px;
+  border: 3px dashed #888;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  font-size: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.drop-zone.drag-over {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.2);
+  transform: scale(1.05);
+}
+
+.drop-zone.has-item {
+  border-color: #333;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+.dropped-card {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.dropped-operator {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6b35;
+}
+
+.drop-placeholder {
+  font-size: 10px;
+  color: #999;
+}
+
+/* Solution Area */
+.solution-area {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 30px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.expression-display {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.result-display {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.success-message {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px 0;
+  animation: celebrate 0.5s ease-in-out;
+}
+
+@keyframes celebrate {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Computer Solutions */
+.computer-solutions {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.solution-item {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-family: monospace;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Mode Selection */
+.mode-selection {
+  margin-bottom: 30px;
+}
+
+.mode-selection h3 {
+  color: white;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    width: 60px;
+    height: 90px;
+  }
+  
+  .drop-zone {
+    width: 60px;
+    height: 90px;
+  }
+  
+  .operator-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .solution-area {
+    padding: 15px;
+  }
+  
+  .drop-zones {
+    flex-wrap: wrap;
+    gap: 5px !important;
+  }
+}

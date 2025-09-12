@@ -4,20 +4,22 @@ import { Card as CardType } from '../types/game';
 
 interface CardProps {
   card: CardType;
-  onDragStart?: (card: CardType) => void;
-  onDragEnd?: () => void;
+  isUsed?: boolean;
+  isDragging?: boolean;
   isDealingAnimation?: boolean;
   dealDelay?: number;
-  isDragging?: boolean;
+  onDragStart?: (card: CardType) => void;
+  onDragEnd?: () => void;
 }
 
 export const Card: React.FC<CardProps> = ({ 
   card, 
-  onDragStart, 
-  onDragEnd,
+  isUsed = false,
+  isDragging = false,
   isDealingAnimation = false,
   dealDelay = 0,
-  isDragging = false
+  onDragStart,
+  onDragEnd
 }) => {
 
   // Animation for card dealing
@@ -34,10 +36,10 @@ export const Card: React.FC<CardProps> = ({
     config: { tension: 300, friction: 30 }
   });
 
-  // Animation for dragging
-  const dragAnimation = useSpring({
-    transform: isDragging ? 'scale(1.1) rotate(5deg)' : 'scale(1) rotate(0deg)',
-    opacity: isDragging ? 0.8 : 1,
+  // Animation for dragging and interaction
+  const cardAnimation = useSpring({
+    transform: isDragging ? 'scale(1.1) rotate(-5deg)' : isUsed ? 'scale(0.9) rotate(0deg)' : 'scale(1) rotate(0deg)',
+    opacity: isDragging ? 0.7 : isUsed ? 0.4 : 1,
     config: { tension: 300, friction: 30 }
   });
 
@@ -63,12 +65,21 @@ export const Card: React.FC<CardProps> = ({
     return value.toString();
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleDragStart = (e: React.DragEvent) => {
+    if (isUsed) {
+      e.preventDefault();
+      return;
+    }
+    // Set the data being dragged
+    e.dataTransfer.setData('application/json', JSON.stringify({
+      type: 'card',
+      data: card
+    }));
+    e.dataTransfer.effectAllowed = 'move';
     onDragStart?.(card);
   };
 
-  const handleMouseUp = () => {
+  const handleDragEnd = () => {
     onDragEnd?.();
   };
 
@@ -76,13 +87,15 @@ export const Card: React.FC<CardProps> = ({
     <animated.div
       style={{
         ...dealAnimation,
-        ...dragAnimation,
-        cursor: isDragging ? 'grabbing' : 'grab'
+        ...cardAnimation,
+        cursor: isUsed ? 'not-allowed' : 'grab'
       }}
-      className={`card ${isDragging ? 'dragging' : ''}`}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      draggable
+      className={`card ${isDragging ? 'dragging' : ''} ${isUsed ? 'used' : ''}`}
+      draggable={!isUsed}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      // Touch support for mobile
+      onTouchStart={(e) => e.preventDefault()}
     >
       <div style={{ color: getSuitColor(card.suit) }}>
         <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>
