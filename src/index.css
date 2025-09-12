@@ -1,0 +1,130 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #2d5a27;
+  color: white;
+}
+
+.game-board {
+  background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.card {
+  width: 80px;
+  height: 120px;
+  border-radius: 8px;
+  background: white;
+  color: black;
+  border: 2px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: grab;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card.dragging {
+  cursor: grabbing;
+  transform: rotate(5deg) scale(1.1);
+}
+
+.operator-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: #ffd700;
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: grab;
+  margin: 5px;
+  transition: transform 0.2s;
+}
+
+.operator-btn:hover {
+  transform: scale(1.1);
+  background: #ffed4a;
+}
+
+.drop-zone {
+  min-height: 80px;
+  border: 2px dashed #ffffff;
+  border-radius: 8px;
+  margin: 10px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s;
+}
+
+.drop-zone.drag-over {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #ffd700;
+}
+
+.solution-area {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.result-display {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffd700;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.success-message {
+  background: rgba(40, 167, 69, 0.8);
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 15px 0;
+}
+
+.computer-solutions {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.mode-selector {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 60px;
+    height: 90px;
+    font-size: 18px;
+  }
+  
+  .operator-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+}
