@@ -21,7 +21,7 @@ function App() {
   });
 
   const [draggedItem, setDraggedItem] = useState<CardType | Operator | null>(null);
-  const [dropZoneItems, setDropZoneItems] = useState<(CardType | Operator | null)[]>(new Array(7).fill(null));
+  const [dropZoneItems, setDropZoneItems] = useState<(CardType | Operator | null)[]>(new Array(11).fill(null));
 
   // Initialize game
   useEffect(() => {
@@ -65,7 +65,7 @@ function App() {
       showSolutions: false,
       solutions
     }));
-    setDropZoneItems(new Array(7).fill(null));
+    setDropZoneItems(new Array(11).fill(null));
   };
 
   const handleModeChange = (mode: 'easy' | 'standard') => {
@@ -91,19 +91,16 @@ function App() {
     setDropZoneItems(prev => {
       const newItems = [...prev];
       newItems[position] = item;
+      
+      // Update current expression by filtering out null items from the updated drop zones
+      const newExpression = newItems.filter(item => item !== null) as (CardType | Operator)[];
+      setGameState(prevState => ({
+        ...prevState,
+        currentExpression: newExpression
+      }));
+      
       return newItems;
     });
-
-    // Update current expression based on drop zones
-    const newExpression = dropZoneItems.filter(item => item !== null);
-    if (position < dropZoneItems.length) {
-      newExpression[position] = item;
-    }
-    
-    setGameState(prev => ({
-      ...prev,
-      currentExpression: newExpression as (CardType | Operator)[]
-    }));
     
     playSound('cardDeal');
   };
@@ -112,15 +109,16 @@ function App() {
     setDropZoneItems(prev => {
       const newItems = [...prev];
       newItems[position] = null;
+      
+      // Update current expression by filtering out null items from the updated drop zones
+      const newExpression = newItems.filter(item => item !== null) as (CardType | Operator)[];
+      setGameState(prevState => ({
+        ...prevState,
+        currentExpression: newExpression
+      }));
+      
       return newItems;
     });
-
-    // Update expression by rebuilding from drop zones
-    const newExpression = dropZoneItems.filter((item, idx) => idx !== position && item !== null);
-    setGameState(prev => ({
-      ...prev,
-      currentExpression: newExpression as (CardType | Operator)[]
-    }));
   };
 
   const clearExpression = () => {
@@ -130,7 +128,7 @@ function App() {
       result: null,
       isCorrect: false
     }));
-    setDropZoneItems(new Array(7).fill(null));
+    setDropZoneItems(new Array(11).fill(null));
   };
 
   const toggleSolutions = () => {
@@ -227,8 +225,8 @@ function App() {
             </div>
           </div>
           
-          <div className="drop-zones d-flex justify-content-center gap-2 mb-3">
-            {[0, 1, 2, 3, 4, 5, 6].map(position => (
+          <div className="drop-zones d-flex justify-content-center gap-1 mb-3">
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(position => (
               <DropZone
                 key={position}
                 position={position}

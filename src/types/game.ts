@@ -5,7 +5,7 @@ export interface Card {
   position?: { x: number; y: number };
 }
 
-export type Operator = '+' | '-' | '*' | '/';
+export type Operator = '+' | '-' | '*' | '/' | '(' | ')';
 
 export interface GameState {
   cards: Card[];

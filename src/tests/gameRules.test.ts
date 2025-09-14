@@ -132,7 +132,7 @@ describe('Game Rules', () => {
       expect(isValidExpression(shortExpression)).toBe(false);
     });
 
-    it('should return false for expressions with wrong card/operator counts', () => {
+    it('should return false for expressions with invalid card/operator arrangement', () => {
       const wrongExpression = [
         { value: 1, suit: 'hearts', id: '1' },
         { value: 2, suit: 'clubs', id: '2' },
@@ -142,7 +142,39 @@ describe('Game Rules', () => {
         '*' as Operator,
         '-' as Operator
       ];
-      expect(isValidExpression(wrongExpression)).toBe(true); // Actually this should be true as it has 4 cards and 3 operators
+      expect(isValidExpression(wrongExpression)).toBe(false); // Invalid: adjacent cards without operators between them
+    });
+
+    it('should return true for valid expressions with parentheses', () => {
+      const validExpressionWithParens = [
+        '(' as Operator,
+        { value: 1, suit: 'hearts', id: '1' },
+        '+' as Operator,
+        { value: 1, suit: 'clubs', id: '2' },
+        ')' as Operator,
+        '*' as Operator,
+        '(' as Operator,
+        { value: 2, suit: 'diamonds', id: '3' },
+        '+' as Operator,
+        { value: 10, suit: 'spades', id: '4' },
+        ')' as Operator
+      ];
+      expect(isValidExpression(validExpressionWithParens)).toBe(true); // (1+1)*(2+10) = 24
+    });
+
+    it('should return false for expressions with unbalanced parentheses', () => {
+      const unbalancedExpression = [
+        '(' as Operator,
+        { value: 1, suit: 'hearts', id: '1' },
+        '+' as Operator,
+        { value: 2, suit: 'clubs', id: '2' },
+        '*' as Operator,
+        { value: 3, suit: 'diamonds', id: '3' },
+        '+' as Operator,
+        { value: 4, suit: 'spades', id: '4' }
+        // Missing closing parenthesis
+      ];
+      expect(isValidExpression(unbalancedExpression)).toBe(false);
     });
   });
 
@@ -175,12 +207,14 @@ describe('Game Rules', () => {
   });
 
   describe('OPERATORS constant', () => {
-    it('should contain all four basic operators', () => {
-      expect(OPERATORS).toHaveLength(4);
+    it('should contain all operators including parentheses', () => {
+      expect(OPERATORS).toHaveLength(6);
       expect(OPERATORS).toContain('+');
       expect(OPERATORS).toContain('-');
       expect(OPERATORS).toContain('*');
       expect(OPERATORS).toContain('/');
+      expect(OPERATORS).toContain('(');
+      expect(OPERATORS).toContain(')');
     });
   });
 });
