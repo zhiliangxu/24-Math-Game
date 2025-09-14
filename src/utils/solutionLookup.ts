@@ -1,56 +1,23 @@
-// Pre-calculated solutions from https://www.4nums.com/solutions/allsolutions/
-// This is a subset of common combinations for the demo
-export const SOLUTION_DATABASE: Record<string, string[]> = {
-  // Format: "a,b,c,d" -> ["solution1", "solution2", ...]
-  "1,1,8,8": [
-    "(1 + 1 + 8) * 8 / 4 = 24", // This was wrong, correcting
-    "(8 + 8 + 1) * 1 + 7 = 24", // This was wrong too
-    "8 / (1 - (1 / 8)) = 24"
-  ],
-  "1,2,3,4": [
-    "(1 + 2 + 3) * 4 = 24",
-    "4 * (1 + 2 + 3) = 24"
-  ],
-  "1,3,4,6": [
-    "6 / (1 - 3 / 4) = 24",
-    "(3 + 1) * 6 = 24"
-  ],
-  "1,4,5,6": [
-    "(5 - 1 / 4) * 6 = 24",
-    "6 * (5 - 1 / 4) = 24"
-  ],
-  "1,5,5,5": [
-    "5 * (5 - 1 / 5) = 24",
-    "(5 + 1 / 5) * 5 = 24"
-  ],
-  "2,2,10,10": [
-    "(10 + 10) + 2 + 2 = 24",
-    "2 * 2 * (10 - 4) = 24" // This needs fixing
-  ],
-  "2,3,4,6": [
-    "2 * 3 * 4 = 24",
-    "6 * 2 * (4 - 2) = 24"
-  ],
-  "3,3,8,8": [
-    "8 / (3 - 8 / 3) = 24", // This needs verification
-    "3 * 8 = 24"
-  ],
-  "4,1,8,7": [
-    "(8 - 4) * (7 - 1) = 24",
-    "(7 - 1) * (8 - 4) = 24"
-  ],
-  // Add more combinations as needed
-  "6,6,6,6": [
-    "6 + 6 + 6 + 6 = 24"
-  ],
-  "1,1,1,21": [
-    "1 + 1 + 1 + 21 = 24"
-  ],
-  "2,4,6,12": [
-    "2 * 4 + 6 + 12 = 24", // This is wrong: 8 + 18 = 26
-    "2 * (4 + 6) + 2 = 24" // This is wrong too
-  ]
-};
+// Complete solutions database from https://www.4nums.com/solutions/allsolutions/
+// All 1362 solvable combinations for the 24 Math Game
+// Solutions are dynamically loaded from all-solutions.json
+
+// Import the solutions JSON file
+import allSolutionsData from '../../all-solutions.json';
+
+// Convert the JSON data to the expected format
+export const SOLUTION_DATABASE: Record<string, string[]> = (() => {
+  const convertedDatabase: Record<string, string[]> = {};
+  
+  // Convert space-separated keys to comma-separated keys and ensure consistent format
+  for (const [key, solutions] of Object.entries(allSolutionsData)) {
+    // Convert "1 1 1 8" to "1,1,1,8"
+    const commaKey = key.replace(/\s+/g, ',');
+    convertedDatabase[commaKey] = solutions;
+  }
+  
+  return convertedDatabase;
+})();
 
 // Fix the incorrect solutions above
 const CORRECTED_SOLUTIONS: Record<string, string[]> = {
