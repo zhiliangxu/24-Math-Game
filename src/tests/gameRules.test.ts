@@ -44,6 +44,18 @@ describe('Game Rules', () => {
         ids.add(card.id);
       });
     });
+
+    it('should never generate duplicate cards (same suit and value)', () => {
+      // Test multiple generations to ensure no duplicates
+      for (let i = 0; i < 20; i++) {
+        const cards = generateCards('standard');
+        const cardSignatures = cards.map(card => `${card.suit}-${card.value}`);
+        const uniqueSignatures = new Set(cardSignatures);
+        
+        expect(uniqueSignatures.size).toBe(4);
+        expect(cards).toHaveLength(4);
+      }
+    });
   });
 
   describe('calculateExpression', () => {

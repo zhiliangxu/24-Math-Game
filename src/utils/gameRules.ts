@@ -11,22 +11,42 @@ export const GAME_CONFIG: GameConfig = {
 
 export const OPERATORS: Operator[] = ['+', '-', '*', '/'];
 
-export function generateCards(mode: 'easy' | 'standard'): Card[] {
+// Create a standard deck of cards
+function createDeck(mode: 'easy' | 'standard'): Card[] {
   const { min, max } = GAME_CONFIG.cardRange[mode];
-  const cards: Card[] = [];
+  const deck: Card[] = [];
   const suits: ('hearts' | 'diamonds' | 'clubs' | 'spades')[] = ['hearts', 'diamonds', 'clubs', 'spades'];
   
-  for (let i = 0; i < GAME_CONFIG.cardsPerGame; i++) {
-    const value = Math.floor(Math.random() * (max - min + 1)) + min;
-    const suit = suits[Math.floor(Math.random() * suits.length)];
-    cards.push({
-      value,
-      suit,
-      id: `card-${i}-${Date.now()}-${Math.random()}`
-    });
+  for (let value = min; value <= max; value++) {
+    for (const suit of suits) {
+      deck.push({
+        value,
+        suit,
+        id: `${suit}-${value}`
+      });
+    }
   }
   
-  return cards;
+  return deck;
+}
+
+// Shuffle an array using Fisher-Yates algorithm
+function shuffleDeck<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+export function generateCards(mode: 'easy' | 'standard'): Card[] {
+  // Create and shuffle a complete deck
+  const deck = createDeck(mode);
+  const shuffledDeck = shuffleDeck(deck);
+  
+  // Deal the first 4 cards from the shuffled deck
+  return shuffledDeck.slice(0, GAME_CONFIG.cardsPerGame);
 }
 
 export function calculateExpression(expression: (Card | Operator)[]): number | null {
