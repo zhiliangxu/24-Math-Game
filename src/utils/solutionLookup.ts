@@ -5,26 +5,13 @@
 // Import the solutions JSON file
 import allSolutionsData from '../all-solutions.json';
 
-// Convert the JSON data to the expected format
-export const SOLUTION_DATABASE: Record<string, string[]> = (() => {
-  const convertedDatabase: Record<string, string[]> = {};
-  
-  // Convert space-separated keys to comma-separated keys and ensure consistent format
-  for (const [key, solutions] of Object.entries(allSolutionsData)) {
-    // Convert "1 1 1 8" to "1,1,1,8"
-    const commaKey = key.replace(/\s+/g, ',');
-    if (Array.isArray(solutions)) {
-      convertedDatabase[commaKey] = solutions as string[];
-    }
-  }
-  
-  return convertedDatabase;
-})();
+// Use the JSON data directly with space-separated keys
+export const SOLUTION_DATABASE: Record<string, string[]> = allSolutionsData;
 
 // Async version for getting solutions (for backward compatibility, now synchronous)
 export async function getSolutionsAsync(cards: number[]): Promise<string[]> {
   const sortedCards = [...cards].sort((a, b) => a - b);
-  const key = sortedCards.join(',');
+  const key = sortedCards.join(' ');
   
   // Return solutions from database
   const solutions = SOLUTION_DATABASE[key] || [];
@@ -34,7 +21,7 @@ export async function getSolutionsAsync(cards: number[]): Promise<string[]> {
 // Synchronous version for getting solutions
 export function getSolutions(cards: number[]): string[] {
   const sortedCards = [...cards].sort((a, b) => a - b);
-  const key = sortedCards.join(',');
+  const key = sortedCards.join(' ');
   
   // Return solutions from database
   const solutions = SOLUTION_DATABASE[key] || [];
