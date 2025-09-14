@@ -7,7 +7,7 @@ import {
   GAME_CONFIG,
   OPERATORS
 } from '../utils/gameRules';
-import { Card, Operator } from '../types/game';
+import { Operator } from '../types/game';
 
 describe('Game Rules', () => {
   describe('generateCards', () => {
@@ -65,21 +65,15 @@ describe('Game Rules', () => {
     });
 
     it('should calculate simple addition correctly', () => {
-      const cards: Card[] = [
-        { value: 2, suit: 'hearts', id: '1' },
-        { value: 3, suit: 'clubs', id: '2' }
-      ];
-      const expression = [cards[0], '+' as Operator, cards[1]];
-      // This won't work with current implementation as it expects 4 numbers and 3 operators
-      // Let's test a complete expression
+      // Test a complete expression: 1 + 2 + 3 * 6 = 21 (with precedence)
       const completeExpression = [
-        { value: 1, suit: 'hearts', id: '1' },
+        { value: 1, suit: 'hearts' as const, id: '1' },
         '+' as Operator,
-        { value: 2, suit: 'clubs', id: '2' },
+        { value: 2, suit: 'clubs' as const, id: '2' },
         '+' as Operator,
-        { value: 3, suit: 'diamonds', id: '3' },
+        { value: 3, suit: 'diamonds' as const, id: '3' },
         '*' as Operator,
-        { value: 6, suit: 'spades', id: '4' }
+        { value: 6, suit: 'spades' as const, id: '4' }
       ];
       const result = calculateExpression(completeExpression);
       expect(result).toBe(21); // 1 + 2 + 3 * 6 = 1 + 2 + 18 = 21
@@ -87,13 +81,13 @@ describe('Game Rules', () => {
 
     it('should handle multiplication and division', () => {
       const expression = [
-        { value: 4, suit: 'hearts', id: '1' },
+        { value: 4, suit: 'hearts' as const, id: '1' },
         '*' as Operator,
-        { value: 6, suit: 'clubs', id: '2' },
+        { value: 6, suit: 'clubs' as const, id: '2' },
         '/' as Operator,
-        { value: 2, suit: 'diamonds', id: '3' },
+        { value: 2, suit: 'diamonds' as const, id: '3' },
         '+' as Operator,
-        { value: 0, suit: 'spades', id: '4' }
+        { value: 0, suit: 'spades' as const, id: '4' }
       ];
       const result = calculateExpression(expression);
       expect(result).toBe(12); // 4 * 6 / 2 + 0 = 24 / 2 + 0 = 12
@@ -101,8 +95,8 @@ describe('Game Rules', () => {
 
     it('should return null for invalid expressions', () => {
       const invalidExpression = [
-        { value: 1, suit: 'hearts', id: '1' },
-        { value: 2, suit: 'clubs', id: '2' } // Missing operators
+        { value: 1, suit: 'hearts' as const, id: '1' },
+        { value: 2, suit: 'clubs' as const, id: '2' } // Missing operators
       ];
       const result = calculateExpression(invalidExpression);
       expect(result).toBeNull();
@@ -112,32 +106,32 @@ describe('Game Rules', () => {
   describe('isValidExpression', () => {
     it('should return true for valid expressions', () => {
       const validExpression = [
-        { value: 1, suit: 'hearts', id: '1' },
+        { value: 1, suit: 'hearts' as const, id: '1' },
         '+' as Operator,
-        { value: 2, suit: 'clubs', id: '2' },
+        { value: 2, suit: 'clubs' as const, id: '2' },
         '*' as Operator,
-        { value: 3, suit: 'diamonds', id: '3' },
+        { value: 3, suit: 'diamonds' as const, id: '3' },
         '-' as Operator,
-        { value: 4, suit: 'spades', id: '4' }
+        { value: 4, suit: 'spades' as const, id: '4' }
       ];
       expect(isValidExpression(validExpression)).toBe(true);
     });
 
     it('should return false for expressions with wrong length', () => {
       const shortExpression = [
-        { value: 1, suit: 'hearts', id: '1' },
+        { value: 1, suit: 'hearts' as const, id: '1' },
         '+' as Operator,
-        { value: 2, suit: 'clubs', id: '2' }
+        { value: 2, suit: 'clubs' as const, id: '2' }
       ];
       expect(isValidExpression(shortExpression)).toBe(false);
     });
 
     it('should return false for expressions with invalid card/operator arrangement', () => {
       const wrongExpression = [
-        { value: 1, suit: 'hearts', id: '1' },
-        { value: 2, suit: 'clubs', id: '2' },
-        { value: 3, suit: 'diamonds', id: '3' },
-        { value: 4, suit: 'spades', id: '4' },
+        { value: 1, suit: 'hearts' as const, id: '1' },
+        { value: 2, suit: 'clubs' as const, id: '2' },
+        { value: 3, suit: 'diamonds' as const, id: '3' },
+        { value: 4, suit: 'spades' as const, id: '4' },
         '+' as Operator,
         '*' as Operator,
         '-' as Operator
@@ -148,15 +142,15 @@ describe('Game Rules', () => {
     it('should return true for valid expressions with parentheses', () => {
       const validExpressionWithParens = [
         '(' as Operator,
-        { value: 1, suit: 'hearts', id: '1' },
+        { value: 1, suit: 'hearts' as const, id: '1' },
         '+' as Operator,
-        { value: 1, suit: 'clubs', id: '2' },
+        { value: 1, suit: 'clubs' as const, id: '2' },
         ')' as Operator,
         '*' as Operator,
         '(' as Operator,
-        { value: 2, suit: 'diamonds', id: '3' },
+        { value: 2, suit: 'diamonds' as const, id: '3' },
         '+' as Operator,
-        { value: 10, suit: 'spades', id: '4' },
+        { value: 10, suit: 'spades' as const, id: '4' },
         ')' as Operator
       ];
       expect(isValidExpression(validExpressionWithParens)).toBe(true); // (1+1)*(2+10) = 24
@@ -165,13 +159,13 @@ describe('Game Rules', () => {
     it('should return false for expressions with unbalanced parentheses', () => {
       const unbalancedExpression = [
         '(' as Operator,
-        { value: 1, suit: 'hearts', id: '1' },
+        { value: 1, suit: 'hearts' as const, id: '1' },
         '+' as Operator,
-        { value: 2, suit: 'clubs', id: '2' },
+        { value: 2, suit: 'clubs' as const, id: '2' },
         '*' as Operator,
-        { value: 3, suit: 'diamonds', id: '3' },
+        { value: 3, suit: 'diamonds' as const, id: '3' },
         '+' as Operator,
-        { value: 4, suit: 'spades', id: '4' }
+        { value: 4, suit: 'spades' as const, id: '4' }
         // Missing closing parenthesis
       ];
       expect(isValidExpression(unbalancedExpression)).toBe(false);
@@ -181,26 +175,26 @@ describe('Game Rules', () => {
   describe('checkSolution', () => {
     it('should return true for expressions that equal 24', () => {
       const solution = [
-        { value: 6, suit: 'hearts', id: '1' },
+        { value: 6, suit: 'hearts' as const, id: '1' },
         '+' as Operator,
-        { value: 6, suit: 'clubs', id: '2' },
+        { value: 6, suit: 'clubs' as const, id: '2' },
         '+' as Operator,
-        { value: 6, suit: 'diamonds', id: '3' },
+        { value: 6, suit: 'diamonds' as const, id: '3' },
         '+' as Operator,
-        { value: 6, suit: 'spades', id: '4' }
+        { value: 6, suit: 'spades' as const, id: '4' }
       ];
       expect(checkSolution(solution)).toBe(true);
     });
 
     it('should return false for expressions that do not equal 24', () => {
       const nonSolution = [
-        { value: 1, suit: 'hearts', id: '1' },
+        { value: 1, suit: 'hearts' as const, id: '1' },
         '+' as Operator,
-        { value: 1, suit: 'clubs', id: '2' },
+        { value: 1, suit: 'clubs' as const, id: '2' },
         '+' as Operator,
-        { value: 1, suit: 'diamonds', id: '3' },
+        { value: 1, suit: 'diamonds' as const, id: '3' },
         '+' as Operator,
-        { value: 1, suit: 'spades', id: '4' }
+        { value: 1, suit: 'spades' as const, id: '4' }
       ];
       expect(checkSolution(nonSolution)).toBe(false);
     });
