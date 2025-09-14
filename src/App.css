@@ -66,10 +66,51 @@
   z-index: 1000;
 }
 
+/* Drop Zone Container with Horizontal Scroll */
+.drop-zones-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0;
+  margin-bottom: 1rem;
+  /* Improve scrollbar appearance */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.drop-zones-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.drop-zones-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.drop-zones-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.drop-zones-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.drop-zones {
+  display: flex;
+  gap: 4px;
+  padding: 8px 4px;
+  min-width: fit-content;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Drop Zone Styling */
 .drop-zone {
   width: 60px;
-  height: 100px;
+  height: 80px;
+  min-width: 60px;
+  flex-shrink: 0;
   border: 2px dashed #888;
   border-radius: 6px;
   display: flex;
@@ -193,7 +234,7 @@
   margin-bottom: 15px;
 }
 
-/* Responsive Design */
+/* Responsive Design - Horizontal Scrolling */
 @media (max-width: 768px) {
   .card {
     width: 45px;
@@ -201,9 +242,14 @@
   }
   
   .drop-zone {
-    width: 45px;
-    height: 75px;
-    font-size: 8px;
+    width: 50px;
+    height: 65px;
+    min-width: 50px;
+    font-size: 9px;
+  }
+  
+  .drop-zones {
+    gap: 3px;
   }
   
   .operator-btn {
@@ -215,8 +261,30 @@
   .solution-area {
     padding: 15px;
   }
+}
+
+@media (max-width: 480px) {
+  .drop-zone {
+    width: 45px;
+    height: 60px;
+    min-width: 45px;
+    font-size: 8px;
+  }
   
   .drop-zones {
-    gap: 2px !important;
+    gap: 2px;
+  }
+}
+
+@media (max-width: 350px) {
+  .drop-zone {
+    width: 40px;
+    height: 55px;
+    min-width: 40px;
+    font-size: 7px;
+  }
+  
+  .drop-zones {
+    gap: 2px;
   }
 }

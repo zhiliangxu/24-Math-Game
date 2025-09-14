@@ -218,16 +218,18 @@ function App() {
             </div>
           </div>
           
-          <div className="drop-zones d-flex justify-content-center gap-1 mb-3">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(position => (
-              <DropZone
-                key={position}
-                position={position}
-                currentItem={dropZoneItems[position]}
-                onDrop={handleDrop}
-                onRemove={handleRemove}
-              />
-            ))}
+          <div className="drop-zones-container">
+            <div className="drop-zones">
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(position => (
+                <DropZone
+                  key={position}
+                  position={position}
+                  currentItem={dropZoneItems[position]}
+                  onDrop={handleDrop}
+                  onRemove={handleRemove}
+                />
+              ))}
+            </div>
           </div>
 
           <div className="result-display">
