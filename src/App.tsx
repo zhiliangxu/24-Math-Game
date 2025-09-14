@@ -28,6 +28,15 @@ function App() {
     startNewGame();
   }, []);
 
+  // Update expression when drop zones change
+  useEffect(() => {
+    const newExpression = dropZoneItems.filter(item => item !== null) as (CardType | Operator)[];
+    setGameState(prev => ({
+      ...prev,
+      currentExpression: newExpression
+    }));
+  }, [dropZoneItems]);
+
   // Calculate result when expression changes
   useEffect(() => {
     const result = calculateExpression(gameState.currentExpression);
@@ -91,14 +100,6 @@ function App() {
     setDropZoneItems(prev => {
       const newItems = [...prev];
       newItems[position] = item;
-      
-      // Update current expression by filtering out null items from the updated drop zones
-      const newExpression = newItems.filter(item => item !== null) as (CardType | Operator)[];
-      setGameState(prevState => ({
-        ...prevState,
-        currentExpression: newExpression
-      }));
-      
       return newItems;
     });
     
@@ -109,14 +110,6 @@ function App() {
     setDropZoneItems(prev => {
       const newItems = [...prev];
       newItems[position] = null;
-      
-      // Update current expression by filtering out null items from the updated drop zones
-      const newExpression = newItems.filter(item => item !== null) as (CardType | Operator)[];
-      setGameState(prevState => ({
-        ...prevState,
-        currentExpression: newExpression
-      }));
-      
       return newItems;
     });
   };
