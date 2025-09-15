@@ -34,6 +34,7 @@ The 24 math game is a classic mathematical puzzle where players are given four n
 * The game board is green.
 * Use poker cards to represent numbers.
 * Use animation for dealing cards, use sound when cards are dealt.
+* Allow players to use add, subtract, multiple, divide operators, as well as parenthesis.
 * Players can drag and drop cards and operators to input a solution. The result is calculated in real time.
 * Congratulate players if the solution they input is correct, with a sound and animation.
 * Players can choose to let computer tell them the solutions. Solutions by computer are displayed in plain text. Display all distinct solutions.
@@ -51,3 +52,4 @@ The 24 math game is a classic mathematical puzzle where players are given four n
 * Code should be modular, for example, implement solution lookup in a separate TypeScript file, implement rules of the game in a separate TypeScript file too. Group similar files in folders.
 * Add test cases for TypeScript modules. Make sure all test cases can pass.
 * At the end, compile TypeScript code to minimal JavaScript so that it can run in a web browser.
+* When the width of solution area is not enough, add a horizontal scroll bar for the area to drop cards.
