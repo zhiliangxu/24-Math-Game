@@ -48,7 +48,7 @@ The 24 math game is a classic mathematical puzzle where players are given four n
 * Use Bootstrap for UI styles.
 * Use React Spring for animation effect.
 * Use NPM packages only where necessary.
-* Use the solutions listed in [All distinct 24 math game solutions](https://www.4nums.com/solutions/allsolutions/) to look for solutions in computer mode. Do not right algorithms to figure out solutions.
+* Use the solutions listed in [All distinct 24 math game solutions](https://www.4nums.com/solutions/allsolutions/) to look for solutions in computer mode. Do not write algorithms to figure out solutions.
 * Code should be modular, for example, implement solution lookup in a separate TypeScript file, implement rules of the game in a separate TypeScript file too. Group similar files in folders.
 * Add test cases for TypeScript modules. Make sure all test cases can pass.
 * At the end, compile TypeScript code to minimal JavaScript so that it can run in a web browser.
